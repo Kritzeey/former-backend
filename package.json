@@ -10,7 +10,7 @@
     "build": "bun build src/index.ts --target=bun --outdir dist",
     "format": "prettier src/**/*.{ts,js} --write",
     "lint": "eslint src/**/*",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
