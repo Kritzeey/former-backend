@@ -1,3 +1,5 @@
+export type FormStatus = "active" | "closed";
+
 export class Form {
   constructor(
     public readonly id: string,
@@ -6,6 +8,7 @@ export class Form {
     private _description: string,
     public readonly createdAt: Date,
     private _updatedAt: Date,
+    private _status: FormStatus = "active",
   ) {}
 
   get title(): string {
@@ -20,6 +23,10 @@ export class Form {
     return this._updatedAt;
   }
 
+  get status(): FormStatus {
+    return this._status;
+  }
+
   public updateDetails(title: string, description: string): void {
     if (title.trim().length === 0) {
       throw new Error("Form title cannot be empty.");
@@ -31,6 +38,16 @@ export class Form {
 
     this._title = title;
     this._description = description;
+    this._updatedAt = new Date();
+  }
+
+  public closeForm(): void {
+    this._status = "closed";
+    this._updatedAt = new Date();
+  }
+
+  public activateForm(): void {
+    this._status = "active";
     this._updatedAt = new Date();
   }
 }

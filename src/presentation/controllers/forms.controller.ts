@@ -3,11 +3,11 @@ import type { CreateFormUseCase } from "../../application/use-cases/forms/create
 import type { GetAllFormsUseCase } from "../../application/use-cases/forms/get-all-forms.use-case";
 import type { GetFormByIdUseCase } from "../../application/use-cases/forms/get-form-by-id.use-case";
 import type { UpdateFormUseCase } from "../../application/use-cases/forms/update-form.use-case";
+import type { DeleteFormUseCase } from "../../application/use-cases/forms/delete-form.use-case";
 import {
   BadRequestException,
   NotFoundException,
 } from "../../domain/exceptions/http.exception";
-import type { DeleteFormUseCase } from "../../application/use-cases/forms/delete-form.use-case";
 
 export class FormController {
   constructor(
@@ -34,8 +34,20 @@ export class FormController {
     res.status(201).json({ message: "Form created successfully.", form });
   }
 
-  async getAll(_req: Request, res: Response): Promise<void> {
-    const forms = await this.getAllFormsUseCase.execute();
+  async getAll(req: Request, res: Response): Promise<void> {
+    const { search, status, sortBy } = req.query;
+
+    const finalSearch = typeof search === "string" ? search : undefined;
+    const finalStatus =
+      status === "active" || status === "closed" ? status : undefined;
+    const finalSortby =
+      sortBy === "asc" || sortBy === "desc" ? sortBy : undefined;
+
+    const forms = await this.getAllFormsUseCase.execute(
+      finalSearch,
+      finalStatus,
+      finalSortby,
+    );
 
     res.status(200).json({ message: "Forms fetched successfully", forms });
   }
