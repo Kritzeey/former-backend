@@ -1,14 +1,19 @@
 import express from "express";
+import cors from "cors";
 import { errorHandler } from "./presentation/middlewares/error-handler.middleware";
 import authRoutes from "./presentation/routes/auth.routes";
 import formsRoutes from "./presentation/routes/forms.routes";
-import cors from "cors";
 
 const app = express();
 
-app.use(express.json());
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"]
+}));
 
-app.use(cors());
+app.use(express.json());
 
 app.get("/", (_req, res) => {
   res.status(200).send("Hello World");
