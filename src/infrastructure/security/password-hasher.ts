@@ -1,7 +1,7 @@
 import type { IPasswordHasher } from "../../application/ports/auth/password-hasher.interface";
 import { compare, hash } from "bcrypt";
 
-export class BcryptPasswordHasher implements IPasswordHasher {
+export class PasswordHasher implements IPasswordHasher {
   async hash(password: string): Promise<string> {
     const saltRounds = 10;
 
