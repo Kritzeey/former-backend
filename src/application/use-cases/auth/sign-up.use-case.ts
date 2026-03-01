@@ -3,7 +3,7 @@ import { BadRequestException } from "../../../domain/exceptions/http.exception";
 import type { IPasswordHasher } from "../../ports/auth/password-hasher.interface";
 import type { IUserRepository } from "../../ports/users/user.repository.interface";
 
-export class CreateUserUseCase {
+export class SignUpUseCase {
   constructor(
     private userRepository: IUserRepository,
     private passwordHasher: IPasswordHasher,
