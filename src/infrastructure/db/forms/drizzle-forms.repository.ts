@@ -1,4 +1,4 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, asc, ilike, and } from "drizzle-orm";
 import { db } from "../../../../db/db";
 import type { IFormRepository } from "../../../application/ports/forms/forms-repository.interface";
 import { Form } from "../../../domain/entities/forms/form.entity";
@@ -13,6 +13,7 @@ export class DrizzleFormRepository implements IFormRepository {
       record.description,
       record.createdAt,
       record.updatedAt,
+      record.status,
     );
   }
 
@@ -22,16 +23,34 @@ export class DrizzleFormRepository implements IFormRepository {
       userId: form.userId,
       title: form.title,
       description: form.description,
+      status: form.status,
       createdAt: form.createdAt,
       updatedAt: form.updatedAt,
     });
   }
 
-  async findAll(): Promise<Form[]> {
+  async findAll(
+    search?: string,
+    status?: "active" | "closed",
+    sortBy: "asc" | "desc" = "desc",
+  ): Promise<Form[]> {
+    const conditions = [];
+
+    if (search) {
+      conditions.push(ilike(formsTable.title, `%${search}%`));
+    }
+
+    if (status) {
+      conditions.push(eq(formsTable.status, status));
+    }
+
+    const orderDirection = sortBy === "asc" ? asc : desc;
+
     const records = await db
       .select()
       .from(formsTable)
-      .orderBy(desc(formsTable.createdAt));
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(orderDirection(formsTable.createdAt));
 
     return records.map((record) => this.mapToDomain(record));
   }
@@ -68,6 +87,7 @@ export class DrizzleFormRepository implements IFormRepository {
       .set({
         title: form.title,
         description: form.description,
+        status: form.status,
         updatedAt: form.updatedAt,
       })
       .where(eq(formsTable.id, form.id))

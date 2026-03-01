@@ -1,5 +1,7 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, jsonb, pgEnum } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+
+export const formStatusEnum = pgEnum("form_status", ["active", "closed"]);
 
 export const usersTable = pgTable("users", {
   id: text("id").primaryKey(),
@@ -15,6 +17,7 @@ export const formsTable = pgTable("forms", {
     .references(() => usersTable.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description").notNull(),
+  status: formStatusEnum("status").default("active").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
