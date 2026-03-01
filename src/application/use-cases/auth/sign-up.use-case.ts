@@ -1,7 +1,7 @@
-import { User } from "../../../domain/entities/user/user.entity";
+import { User } from "../../../domain/entities/users/user.entity";
 import { BadRequestException } from "../../../domain/exceptions/http.exception";
 import type { IPasswordHasher } from "../../ports/auth/password-hasher.interface";
-import type { IUserRepository } from "../../ports/users/user.repository.interface";
+import type { IUserRepository } from "../../ports/users/users.repository.interface";
 
 export class SignUpUseCase {
   constructor(

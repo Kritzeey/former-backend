@@ -1,4 +1,4 @@
-import type { IUserRepository } from "../../ports/users/user.repository.interface";
+import type { IUserRepository } from "../../ports/users/users.repository.interface";
 import type { IPasswordHasher } from "../../ports/auth/password-hasher.interface";
 import type { ITokenGenerator } from "../../ports/auth/token-generateor.interface";
 import { UnauthorizedException } from "../../../domain/exceptions/http.exception";
