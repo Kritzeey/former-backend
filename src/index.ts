@@ -3,8 +3,19 @@ import cors from "cors";
 import { errorHandler } from "./presentation/middlewares/error-handler.middleware";
 import authRoutes from "./presentation/routes/auth.routes";
 import formsRoutes from "./presentation/routes/forms.routes";
+import rateLimit from "express-rate-limit";
 
 const app = express();
+
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30,
+  message: { message: "Too many requests, please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(apiLimiter);
 
 app.use(
   cors({
