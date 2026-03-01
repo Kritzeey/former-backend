@@ -7,6 +7,9 @@ import { UpdateFormUseCase } from "../../application/use-cases/forms/update-form
 import { FormController } from "../controllers/forms.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { DrizzleFormRepository } from "../../infrastructure/db/forms/drizzle-forms.repository";
+import { QuestionController } from "../controllers/questions.controller";
+import { AddQuestionUseCase } from "../../application/use-cases/questions/add-question.use-case";
+import { DrizzleQuestionRepository } from "../../infrastructure/db/questions/drizzle-question.repository";
 
 const router = Router();
 
@@ -20,6 +23,12 @@ const formController = new FormController(
   new DeleteFormUseCase(formRepository),
 );
 
+const questionRepository = new DrizzleQuestionRepository();
+
+const questionController = new QuestionController(
+  new AddQuestionUseCase(questionRepository),
+);
+
 router.get("/:id", (req, res) => formController.getById(req, res));
 router.get("/", (req, res) => formController.getAll(req, res));
 router.post("/", authMiddleware, (req, res) => formController.create(req, res));
@@ -28,6 +37,9 @@ router.put("/:id", authMiddleware, (req, res) =>
 );
 router.delete("/:id", authMiddleware, (req, res) =>
   formController.delete(req, res),
+);
+router.post("/:formId/questions", authMiddleware, (req, res) =>
+  questionController.add(req, res),
 );
 
 export default router;

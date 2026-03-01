@@ -1,4 +1,4 @@
-export type FormStatus = "active" | "closed";
+import { Question } from "../questions/question.entity";
 
 export class Form {
   constructor(
@@ -8,46 +8,22 @@ export class Form {
     private _description: string,
     public readonly createdAt: Date,
     private _updatedAt: Date,
-    private _status: FormStatus = "active",
+    private _status: "active" | "closed" = "active",
+    private _questions: Question[] = [],
   ) {}
 
-  get title(): string {
-    return this._title;
+  get questions(): Question[] {
+    return [...this._questions];
   }
 
-  get description(): string {
-    return this._description;
-  }
-
-  get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  get status(): FormStatus {
-    return this._status;
-  }
-
-  public updateDetails(title: string, description: string): void {
-    if (title.trim().length === 0) {
-      throw new Error("Form title cannot be empty.");
+  public addQuestion(question: Question, responseCount: number): void {
+    if (responseCount > 0) {
+      throw new Error(
+        "Cannot add questions to a form that already has responses.",
+      );
     }
 
-    if (description.trim().length === 0) {
-      throw new Error("Form description cannot be empty.");
-    }
-
-    this._title = title;
-    this._description = description;
-    this._updatedAt = new Date();
-  }
-
-  public closeForm(): void {
-    this._status = "closed";
-    this._updatedAt = new Date();
-  }
-
-  public activateForm(): void {
-    this._status = "active";
+    this._questions.push(question);
     this._updatedAt = new Date();
   }
 }
