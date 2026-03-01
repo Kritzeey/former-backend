@@ -1,6 +1,7 @@
 import type { IUserRepository } from "../../ports/users/user.repository.interface";
 import type { IPasswordHasher } from "../../ports/auth/password-hasher.interface";
 import type { ITokenGenerator } from "../../ports/auth/token-generateor.interface";
+import { UnauthorizedException } from "../../../domain/exceptions/http.exception";
 
 export class LogInUseCase {
   constructor(
@@ -13,13 +14,13 @@ export class LogInUseCase {
     const user = await this.userRepository.findByUsername(username);
 
     if (!user) {
-      throw new Error("Invalid username or password.");
+      throw new UnauthorizedException("Invalid username or password.");
     }
 
     const valid = await this.passwordHasher.compare(password, user.password);
 
     if (!valid) {
-      throw new Error("Invalid username or password.");
+      throw new UnauthorizedException("Invalid username or password.");
     }
 
     const token = this.tokenGenerator.generateToken({

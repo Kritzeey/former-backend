@@ -1,4 +1,5 @@
 import { User } from "../../../domain/entities/user/user.entity";
+import { BadRequestException } from "../../../domain/exceptions/http.exception";
 import type { IPasswordHasher } from "../../ports/auth/password-hasher.interface";
 import type { IUserRepository } from "../../ports/users/user.repository.interface";
 
@@ -15,7 +16,7 @@ export class CreateUserUseCase {
     const existingUser = await this.userRepository.findByUsername(username);
 
     if (existingUser) {
-      throw new Error("Username is already registered");
+      throw new BadRequestException("Username is already registered");
     }
 
     const hashedPassword = await this.passwordHasher.hash(plainPassword);
