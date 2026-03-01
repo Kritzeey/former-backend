@@ -7,16 +7,6 @@ import rateLimit from "express-rate-limit";
 
 const app = express();
 
-const apiLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 30,
-  message: { message: "Too many requests, please try again later." },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-app.use(apiLimiter);
-
 app.use(
   cors({
     origin: true,
@@ -30,6 +20,16 @@ app.use(
     ],
   }),
 );
+
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30,
+  message: { message: "Too many requests, please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(apiLimiter);
 
 app.use(express.json());
 
