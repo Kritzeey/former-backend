@@ -7,9 +7,10 @@
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "start": "bun dist/index.js",
-    "build": "bun build src/index.ts --outdir dist",
+    "build": "bun build src/index.ts --target=bun --outdir dist",
     "format": "prettier src/**/*.{ts,js} --write",
-    "lint": "eslint src/**/*"
+    "lint": "eslint src/**/*",
+    "db:migrate": "drizzle-kit migrate"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

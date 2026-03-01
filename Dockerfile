@@ -12,4 +12,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 3000
 
-CMD ["bun", "run", "start"]
+CMD ["sh", "-c", "bun run db:migrate && bun run start"]
