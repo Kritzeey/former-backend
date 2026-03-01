@@ -6,11 +6,11 @@ export class QuestionController {
   constructor(private addQuestionUseCase: AddQuestionUseCase) {}
 
   async add(req: Request, res: Response): Promise<void> {
-    const formId = req.params.id;
+    const { formId } = req.params; 
 
-    if (typeof formId !== "string") {
-      throw new BadRequestException("Invalid ID parameter");
-    }
+  if (!formId || typeof formId !== "string") {
+    throw new BadRequestException("Invalid ID parameter");
+  }
 
     const { type, text, options } = req.body;
 

@@ -32,7 +32,7 @@ export class DrizzleFormRepository implements IFormRepository {
   async findAll(
     search?: string,
     status?: "active" | "closed",
-    sortBy: "asc" | "desc" = "desc",
+    sortBy: "asc" | "desc" = "desc"
   ): Promise<Form[]> {
     const conditions = [];
 
